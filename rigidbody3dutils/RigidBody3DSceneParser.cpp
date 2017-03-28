@@ -38,6 +38,7 @@
 #include "rigidbody3d/Geometry/RigidBodyBox.h"
 #include "rigidbody3d/Geometry/RigidBodySphere.h"
 #include "rigidbody3d/Geometry/RigidBodyStaple.h"
+#include "rigidbody3d/Geometry/RigidBodyPolyline.h"
 #include "rigidbody3d/Geometry/RigidBodyTriangleMesh.h"
 #include "rigidbody3d/RigidBody3DState.h"
 #include "rigidbody3d/Forces/NearEarthGravityForce.h"
@@ -184,6 +185,62 @@ static bool loadSimState( const rapidxml::xml_node<>& node, RigidBody3DState& si
         }
         geometry.emplace_back( new RigidBodyBox{ r } );
       }
+    }
+    else if( geom_type == "polyline" ) 
+    {
+        // Number of polyline vertices (samples)
+        int n;
+        {   
+            const rapidxml::xml_attribute<>* const attrib{ nd->first_attribute( "n" ) };
+            if ( !attrib )
+            {
+                std::cerr << "Failed to locate n attribute for polyline geometry" << std::endl;
+                return false;
+            }
+            const bool parsed{ StringUtilities::extractFromString( attrib->value(), n ) };
+            if( !parsed || n <= 0 )
+            {
+                std::cerr << "Failed to load n attribute for polyline geometry" << std::endl;
+                return false;
+            }
+            assert( n > 1);
+        }
+
+        // Radius of polyline
+        scalar r;
+        {   
+            const rapidxml::xml_attribute<>* const attrib{ nd->first_attribute( "r" ) };
+            if ( !attrib )
+            {
+                std::cerr << "Failed to locate r attribute for polyline geometry" << std::endl;
+                return false;
+            }
+            const bool parsed{ StringUtilities::extractFromString( attrib->value(), r ) };
+            if( !parsed || r <= 0.0 )
+            {
+                std::cerr << "Failed to load r attribute for polyline geometry" << std::endl;
+                return false;
+            }
+        }
+
+        // Vector(3N) of vertex positions of polyline [x00 x01 x02 x10 x11 x12 ... xN0 xN1 xN2]
+        VectorXs vertices;
+        { 
+            const rapidxml::xml_attribute<>* const attrib{ nd->first_attribute( "v" ) };
+            if ( !attrib )
+            {
+                std::cerr << "Failed to locate v attribute for polyline geometry" << std::endl;
+                return false;
+            }
+            
+            if( !StringUtilities::readScalarList( attrib->value(), 3 * n, ' ', vertices ) )
+            {
+              std::cerr << "Failed to load v attribute for box geometry, must provide 3n positive scalars" << std::endl;
+              return false;
+            }
+            assert( v.size() == 3 * n );
+        }
+        geometry.emplace_back( std::unique_ptr<RigidBodyGeometry>{ new RigidBodyPolyline{ vertices, r } } );
     }
     else if( geom_type == "staple" )
     {

@@ -10,6 +10,7 @@ set( Sources
   Rendering/StaticCylinderRenderer.cpp
   Rendering/StaticPlaneRenderer.cpp
   Rendering/StapleRenderer.cpp
+  Rendering/PolylineRenderer.cpp
   Rendering/BodyGeometryRenderer.cpp
 )
 
@@ -24,5 +25,6 @@ set( Headers
   Rendering/StaticCylinderRenderer.h
   Rendering/StaticPlaneRenderer.h
   Rendering/StapleRenderer.h
+  Rendering/PolylineRenderer.h
   Rendering/BodyGeometryRenderer.h
 )

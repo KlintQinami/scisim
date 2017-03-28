@@ -15,7 +15,8 @@ enum class RigidBodyGeometryType : std::uint8_t
   BOX,
   SPHERE,
   STAPLE,
-  TRIANGLE_MESH
+  TRIANGLE_MESH,
+  POLYLINE
 };
 
 class RigidBodyGeometry

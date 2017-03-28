@@ -22,6 +22,7 @@
 #include "rigidbody3d/Geometry/RigidBodySphere.h"
 #include "rigidbody3d/Geometry/RigidBodyTriangleMesh.h"
 #include "rigidbody3d/Geometry/RigidBodyStaple.h"
+#include "rigidbody3d/Geometry/RigidBodyPolyline.h"
 #include "rigidbody3d/StaticGeometry/StaticPlane.h"
 #include "rigidbody3d/StaticGeometry/StaticCylinder.h"
 
@@ -29,6 +30,7 @@
 #include "Rendering/OpenGL3DSphereRenderer.h"
 #include "Rendering/BodyGeometryRenderer.h"
 #include "Rendering/StapleRenderer.h"
+#include "Rendering/PolylineRenderer.h"
 
 #ifndef NDEBUG
 static std::string glErrorToString( const GLenum error_code )
@@ -244,6 +246,11 @@ bool GLWidget::openScene( const QString& xml_scene_file_name, const bool& render
     {
       const RigidBodyStaple& geo{ static_cast<const RigidBodyStaple&>( *m_sim.getState().geometry()[i] ) };
       m_body_renderers[i].reset( new StapleRenderer{ 4, geo.points(), geo.r() } );
+    }
+    else if( m_sim.getState().geometry()[i]->getType() == RigidBodyGeometryType::POLYLINE )
+    {
+      const RigidBodyPolyline& geo{ static_cast<const RigidBodyPolyline&>( *m_sim.getState().geometry()[i] ) };
+      m_body_renderers[i].reset( new PolylineRenderer{ 4, geo.points(), geo.r() } );
     }
     else
     {
@@ -1156,6 +1163,13 @@ void GLWidget::paintBody( const int geo_idx, const RigidBodyGeometry& geometry, 
     paintSphere( sphere_geom, color );
   }
   else if( geometry.getType() == RigidBodyGeometryType::STAPLE )
+  {
+    assert( geo_idx >= 0 );
+    assert( geo_idx < int( m_body_renderers.size() ) );
+    assert( m_body_renderers[geo_idx] != nullptr );
+    m_body_renderers[geo_idx]->renderBody( color.cast<GLfloat>() );
+  }
+  else if( geometry.getType() == RigidBodyGeometryType::POLYLINE )
   {
     assert( geo_idx >= 0 );
     assert( geo_idx < int( m_body_renderers.size() ) );

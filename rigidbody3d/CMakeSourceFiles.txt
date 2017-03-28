@@ -10,6 +10,7 @@ set( Sources
   Geometry/RigidBodyBox.cpp
   Geometry/RigidBodySphere.cpp
   Geometry/RigidBodyStaple.cpp
+  Geometry/RigidBodyPolyline.cpp
   Geometry/RigidBodyTriangleMesh.cpp
   Portals/PlanarPortal.cpp
   UnconstrainedMaps/SplitHamMap.cpp
@@ -53,6 +54,7 @@ set( Headers
   Geometry/RigidBodyBox.h
   Geometry/RigidBodySphere.h
   Geometry/RigidBodyStaple.h
+  Geometry/RigidBodyPolyline.h
   Geometry/RigidBodyTriangleMesh.h
   Portals/PlanarPortal.h
   UnconstrainedMaps/SplitHamMap.h

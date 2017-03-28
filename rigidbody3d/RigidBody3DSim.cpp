@@ -15,6 +15,7 @@
 #include "Geometry/RigidBodyBox.h"
 #include "Geometry/RigidBodySphere.h"
 #include "Geometry/RigidBodyStaple.h"
+#include "Geometry/RigidBodyPolyline.h"
 #include "Geometry/RigidBodyTriangleMesh.h"
 #include "Constraints/BoxBoxUtilities.h"
 #include "Constraints/StapleStapleUtilities.h"

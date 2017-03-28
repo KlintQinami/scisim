@@ -25,6 +25,7 @@ class ImpactFrictionMap;
 class RigidBodyBox;
 class RigidBodySphere;
 class RigidBodyStaple;
+class RigidBodyPolyline;
 class RigidBodyTriangleMesh;
 class AABB;
 class TeleportedCollision;
